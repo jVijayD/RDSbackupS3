@@ -1,0 +1,35 @@
+create database dikazodb;
+use dikazodb
+show tables
+DROP DATABASE backupdb;
+SHOW TABLES LIKE 'products%';
+CREATE USER dkzuser@'%' IDENTIFIED BY 'DKZ1234';
+GRANT ALL PRIVILEGES ON dikazodb.* to dkzuser@'%';
+FLUSH PRIVILEGES;
+UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+
+SHOW VARIABLES LIKE 'max_connections';
+SHOW GLOBAL STATUS LIKE '%connect%';
+SHOW SESSION VARIABLES LIKE 'wait_timeout';
+SET session wait_timeout=300;
+show variables like '%char%';
+SELECT * FROM information_schema.SCHEMATA;
+mysql -h dikazo-db.cwmtlxzpegrd.ap-south-1.rds.amazonaws.com -P 3306 -u admin –p
+mysqldump -h dikazo-db.cwmtlxzpegrd.ap-south-1.rds.amazonaws.com -u admin -p dikazo-web > dataweb1.sql
+mysql -u root -p dikazodb < dataweb1.sql
+
+INSTALLATION 
+curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+    2  sudo bash mariadb_repo_setup --os-type=rhel  --os-version=7 --mariadb-server-version=10.7
+    3  sudo rm -rf /var/cache/yum
+    4  sudo yum makecache
+    5  sudo yum repolist
+    6  sudo yum install MariaDB-server MariaDB-client
+    7  sudo systemctl enable --now mariadb
+    8  systemctl status mariadb
+    9  sudo mariadb-secure-installation
+   10   mysql -u root -p
+   11   mysql -u dkzuser -p
+   12  mysqldump -h dikazo-db.cwmtlxzpegrd.ap-south-1.rds.amazonaws.com -u admin -p dikazo-web > dataweb.sql
+   13  mysql -u root -p dikazodb < dataweb.sql
+   14   mysql -u dkzuser -p
